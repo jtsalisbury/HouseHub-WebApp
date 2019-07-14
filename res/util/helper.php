@@ -1,9 +1,7 @@
 <?php
-    session_start();
+  session_start();
 
-    function checkLogin() {
-        return isset($_SESSION["uid"]);
-    }
-
-
+  function checkLogin() {
+      return isset($_SESSION["uid"]);
+  }
 ?>
