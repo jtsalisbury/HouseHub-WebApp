@@ -6,6 +6,7 @@
     die("not logged in");
   }
 
+  // Grab the post fields
   $page = $_POST["page"];
   $search = $_POST["search"];
   $minPrice = $_POST["minPrice"];
@@ -13,7 +14,9 @@
   $saved = $_POST["saved"];
   $myRequests = $_POST["mine"];
   $targetUserID = $_POST["targetUserID"];
+  $showHidden = $_POST["show_hidden"];
 
+  // Construct the payload
   $url = "http://u747950311.hostingerapp.com/househub/api/listings/retrieve.php";
   $data = array(
     "uid" => "",
@@ -23,6 +26,7 @@
     "price_max" => $maxPrice,
     "pid" => "",
     "search_criteria" => $search,
+    "show_hidden" => $showHidden
   );
 
   if ($myRequests === 'true' || $saved === 'true') {
@@ -33,9 +37,11 @@
     $data["saved"] = "";
   }
 
+  // Create the token
   $token = $jwt->generateToken($data);
   $token = json_encode(array("token" => $token));
 
+  // Open a channel to the request api
   $ch = curl_init($url);
   curl_setopt($ch, CURLOPT_POSTFIELDS, $token);
   curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));

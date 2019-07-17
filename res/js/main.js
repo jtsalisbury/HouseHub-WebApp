@@ -23,10 +23,6 @@ function validateInputs(inputClass) {
   return true;
 }
 
-function request(url, data, callback) {
-  
-}
-
 function prettyDate(date) {
   var d = new Date(date);
 
@@ -45,4 +41,12 @@ function prettyDate(date) {
   }
 
   return mon + "/" + day + "/" + year + " at " + hour + ":" + min + " " + ampm;
+}
+
+function set(key, val) {
+  sessionStorage.setItem(key, val);
+}
+
+function get(key) {
+  return sessionStorage.getItem(key);
 }

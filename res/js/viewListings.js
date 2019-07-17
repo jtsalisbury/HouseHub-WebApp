@@ -3,21 +3,26 @@ var curPage = 1;
 var listings = [];
 
 function createListing(data) {
+  var url = 'http://u747950311.hostingerapp.com/househub/api/images/' + data["pid"] + "/0." + data["first_img_type"];
+
   var ele = `<div class='card mb-2'>
               <div class='card-horizontal' style='transform: rotate(0);'>
                   <div class='img-square-wrapper'>
-                      <img class='card-img' src='https://images.prop24.com/203649576' alt='Property Image'>
+                      <img class='card-img' src='` + url + `' alt='Property Image'>
                   </div>
                   <div class='card-body'>
-                      <h4 class='card-title'> ` + data["title"] + `</h4>
+                      <div class='d-flex'>
+                        <h4 class='card-title'> ` + data["title"] + `</h4>` + (data["hidden"] == 1 ? "<span class='badge badge-secondary ml-auto' style='height: 20px'>Hidden</span>" : "") + `
+
+                      </div>
                       <p class='card-text'>` + data["desc"] + `</p>
                       <p class='card-text'>Price: $` + data["base_price"] + `</p>
 
-                      <a href='#' class='stretched-link' pid='` + data["pid"] + `'></a>
+                      <a href='#' class='listingLink stretched-link' pid='` + data["pid"] + `'></a>
                   </div>
               </div>
               <div class="card-footer text-muted">
-                <small class='text-muted'>Posted on ` + prettyDate(data["created"]) + " by <a href='../account/user.php'>" + data["creator_fname"] + " " + data["creator_lname"] + `</a></small>
+                <small class='text-muted'>Posted on ` + prettyDate(data["created"]) + " by <a href='#' uid='" + data["creator_uid"] + "' class='userLink'>" + data["creator_fname"] + " " + data["creator_lname"] + `</a></small>
               </div>
           </div>`;
 
@@ -33,8 +38,10 @@ function sortListings() {
     }
 
     if (postSort) {
-      return a["created"] = b["created"];
+      return a["created"] - b["created"];
     }
+
+    return b["pid"] - a["pid"];
      
   })
 }
@@ -47,7 +54,11 @@ function populateListings() {
   })
 }
 
+var listingCount = 0;
 function requestListings(page, search, minPrice, maxPrice, saved, mine, targetUserID) {
+  $("#noResults").hide();
+  $("#loadMore").hide();
+
   var data = {
     "page": page,
     "search": search,
@@ -55,7 +66,8 @@ function requestListings(page, search, minPrice, maxPrice, saved, mine, targetUs
     "maxPrice": maxPrice,
     "saved": saved,
     "mine": mine,
-    "targetUserID": targetUserID
+    "targetUserID": targetUserID,
+    "show_hidden": mine
   };
 
   $("#loading").show();
@@ -69,14 +81,18 @@ function requestListings(page, search, minPrice, maxPrice, saved, mine, targetUs
       console.log(res);
       var data = JSON.parse(res);
 
-      if (data["status"] == "error") {
+      console.log(data);
 
+      if (data["status"] == "error") {
+        return;
       }
 
       $("#loading").hide();
 
       if (data["listing_count"] == 0) {
         console.log("no results");
+        $("#noResults").show();
+
       } else {
         $.each(data.listings, function(i, e) {
           listings.push(e);
@@ -85,12 +101,18 @@ function requestListings(page, search, minPrice, maxPrice, saved, mine, targetUs
         sortListings();
         populateListings();
       }
+
+      if (data["total_pages"] > curPage && data["total_pages"] != 0) {
+        $("#loadMore").show();
+      }
+
+      listingCount += data["listing_count"];
+      $(".listingCount").text("Showing 1 to " + listingCount + " of " + data["total_listings"] + " results");
     },
     error: function(res) {
       console.log("error");
       console.log(res);
     }
-
 
   })
 }
@@ -101,6 +123,9 @@ var minPrice, maxPrice, saved, mine, search;
 minPrice = maxPrice = saved = mine = search = "";
 
 $(document).ready(function() {
+  $("#noResults").hide();
+  $("#loadMore").hide();
+
   $("#applyFilter").on("click", function(e) {
     e.preventDefault();
 
@@ -113,6 +138,7 @@ $(document).ready(function() {
     search = $("#searchText").val();
 
     curPage = 1;
+    listingCount = 0;
 
     listings = [];
 
@@ -131,6 +157,12 @@ $(document).ready(function() {
     }
   });
 
+  $("#doLoadMore").on("click", function(e) {
+    curPage++;
+
+    requestListings(curPage, search, minPrice, maxPrice, saved, mine, "");
+  })
+
   $(".priceSort").on("click", function(e) {
     if (!$(this).hasClass("active")) {
       $(this).addClass("active");
@@ -138,14 +170,14 @@ $(document).ready(function() {
 
       priceSort = true;
       postSort = false;
-
-      sortListings();
-      populateListings();
     } else {
       $(this).removeClass("active");
 
       priceSort = false;
     }
+
+    sortListings();
+    populateListings();
   })
 
   $(".postSort").on("click", function(e) {
@@ -155,13 +187,29 @@ $(document).ready(function() {
 
       postSort = true;
       priceSort = false;
-
-      sortListings();
-      populateListings();
     } else {
       $(this).removeClass("active");
 
       postSort = false;
     }
+
+    sortListings();
+    populateListings();
+  })
+
+  $(document).on("click", ".listingLink", function(e) {
+    e.preventDefault();
+
+    set("pid", $(this).attr("pid"));
+
+    window.location.href = "./view.php";
+  })
+
+  $(document).on("click", ".userLink", function(e) {
+    e.preventDefault();
+
+    set("target_uid", $(this).attr("uid"));
+
+    window.location.href = "../account/view.php";
   })
 })

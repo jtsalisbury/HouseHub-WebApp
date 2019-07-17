@@ -45,7 +45,7 @@
             }
         </style>
 
-        <title>HouseHub | Post New Listing</title>
+        <title>HouseHub | View User</title>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -61,10 +61,10 @@
                             
                 <ul class="navbar-nav ml-auto justify-content-end">
                   <li class="nav-item">
-                    <a class="nav-link" href="./viewall.php">View Listings</a>
+                    <a class="nav-link" href="../listings/viewall.php">View Listings</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" href="./create.php">Post Listing</a>
+                    <a class="nav-link" href="./create.php">Post Listing</a>
                   </li>
                   <li class="nav-item btn-group">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
@@ -82,52 +82,42 @@
        <div class="container" style="height:90vh">
            <div class="row h-100">
 
-                <div class="card offset-md-2 col-md-8 offset-sm-1 col-sm-10 align-self-center">
+                <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10 align-self-center">
                     <div class="card-body">
-                        <h5 class="card-title">Post New Listing</h5>
+                        <h5 class="card-title">Login</h5>
+
                         <p>
-                            We are excited you want to post a listing! 
+                            Hey there! Welcome to HouseHub!
                             <br>
-                            Fill out the details and we'll do the rest!
+                            We're glad you're back :)
                         </p>
 
-                        <form action="../res/php/doPostListing.php" enctype='multiple/form-data' id="postForm">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="title" id="title" placeholder="Title">
-                            </div>
-
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="loc" id="loc" placeholder="Location">
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col">
-                                        <input type="number" class="form-control" name="base_price" id="base_price" min="0" placeholder="Base cost">
-                                    </div>
-                                    <div class="col">
-                                        <input type="number" class="form-control" name="add_price" id="add_price" min="0" placeholder="Additional costs">
-                                    </div>
+                        <form class="needs-validation" novalidate>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <div class="input-group-prepend">
+                                  <div class="input-group-text"><img src="../res/img/envelope-closed.svg" height="15.281" width="15.281"></div>
+                                </div>
+                                <input type="email" class="form-control" id="email" placeholder="Email" required>
+                                <div class="invalid-feedback emailFeedback">
+                                    Please ensure you enter a valid email!
                                 </div>
                             </div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="hidden" value="1" id="hidden">
-                                <label class="form-check-label" for="hidden">
-                                    Hidden?
-                                </label>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <div class="input-group-prepend">
+                                  <div class="input-group-text"><img src="../res/img/key.svg" height="15.281" width="15.281"></div>
+                                </div>
+                                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                                <div class="invalid-feedback passwordFeedback">
+                                    Please ensure you enter a password!
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <textarea class="form-control" name="desc" id="desc" rows="3" placeholder="List important details and your phone # (if you'd like)"></textarea>
-                            </div>
+                            <p>
+                                Don't have an account? <a href="register.php" target="_self">Register here</a>
+                            </p>
 
-                            <div class="form-group">
-                                <label for="pics">Pictures</label>
-                                <input type="file" name="file[]" class="form-control-file" id="pics" accept="image/jpg, image/jpeg, image/png" multiple>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                            <button type="submit" class="btn btn-primary" id="doLogin">Submit</button>
                         </form>
 
                     </div>
@@ -140,7 +130,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="http://u747950311.hostingerapp.com/househub/site/res/js/main.js"></script>
-        <script src="http://u747950311.hostingerapp.com/househub/site/res/js/postListing.js"></script>
+        <script src="http://u747950311.hostingerapp.com/househub/site/res/js/viewListings.js"></script>
     </body>
 </html>
 

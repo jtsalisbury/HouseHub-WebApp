@@ -80,19 +80,26 @@
         </nav>
 
         <div class="container-fluid" style="height: calc(100vh - 199.5px); margin-top: 30px; margin-bottom: 30px;">
-
             <div class="row">
-                <div class="card offset-md-4 col-8" style="border: none;">
-                    <div class="card-body">
-                        <form class="form-inline">
-                            <p style="height: 38px; line-height: 38px; margin: 0">Sort by:</p>
-                            <div class="intput-group ml-2">
-                                <button type="button" class="btn btn-primary sort priceSort">Price</button>
-                            </div>
-                            <div class="intput-group ml-2">
-                                <button type="button" class="btn btn-primary sort postSort">Post Date</button>
-                            </div>
-                        </form>
+                <div class="card offset-md-4 col-7" style="border: none;">
+                    <div class="row">
+                        <div class="card-body col-6">
+                            <form class="form-inline">
+                                <p style="height: 38px; line-height: 38px; margin: 0">Sort by:</p>
+                                <div class="intput-group ml-2">
+                                    <button type="button" class="btn btn-primary sort priceSort">Price</button>
+                                </div>
+                                <div class="intput-group ml-2">
+                                    <button type="button" class="btn btn-primary sort postSort">Post Date</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="text-center offset-1 col-5">
+                            <p style="height: 78px; line-height: 78px; margin: 0" class="listingCount">
+                                Showing 0 to 0 of 0 listings
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,9 +133,7 @@
                         </div>
 
                         <button type="submit" id="applyFilter" class="btn btn-primary">Apply Filters</button>
-
-                    </form>                       
-
+                    </form>
                 </div>
 
                 <div class="card col-md-7 offset-sm-1 col-sm-10 align-self-center h-100" style="overflow-y: auto; border: none;">
@@ -138,9 +143,20 @@
                       </div>
                     </div>
 
+                    <div class="text-center" id="noResults">
+                      No Results
+                    </div>
+
                     <div class="row">
                         <div class="col-12 mat-3 listingsContainer">
                             
+                        </div>
+                        <div class="container" id="loadMore">
+                          <div class="row">
+                            <div class="col text-center">
+                              <button type="submit" id="doLoadMore" class="btn btn-primary">Load More</button>
+                            </div>
+                          </div>
                         </div>
                     </div>
                 </div>
