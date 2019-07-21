@@ -63,6 +63,7 @@
 
     // Decode the result
     $result_d = json_decode($result, true);
+    die($result);
 
     if ($result_d["status"] == "error") {
         die($result);

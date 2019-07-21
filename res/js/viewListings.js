@@ -3,9 +3,10 @@ var curPage = 1;
 var listings = [];
 
 function createListing(data) {
-  var url = 'http://u747950311.hostingerapp.com/househub/api/images/' + data["pid"] + "/0." + data["first_img_type"];
+  var url = 'http://u747950311.hostingerapp.com/househub/api/images/' + data["pid"] + "/" + data["images"][0];
+  var savedUrl = "http://u747950311.hostingerapp.com/househub/site/res/img/" + ((data["saved"] === "1" || saved) ? "heart_full" : "heart_outline") + ".svg";
 
-  var ele = `<div class='card mb-2'>
+  var ele = `<div class='card mb-2 ` + "listing-" + data["pid"] + `'>
               <div class='card-horizontal' style='transform: rotate(0);'>
                   <div class='img-square-wrapper'>
                       <img class='card-img' src='` + url + `' alt='Property Image'>
@@ -13,16 +14,26 @@ function createListing(data) {
                   <div class='card-body'>
                       <div class='d-flex'>
                         <h4 class='card-title'> ` + data["title"] + `</h4>` + (data["hidden"] == 1 ? "<span class='badge badge-secondary ml-auto' style='height: 20px'>Hidden</span>" : "") + `
-
                       </div>
+
                       <p class='card-text'>` + data["desc"] + `</p>
                       <p class='card-text'>Price: $` + data["base_price"] + `</p>
+                      <p class='card-text'>Located at ` + data["loc"] + `</p>
 
                       <a href='#' class='listingLink stretched-link' pid='` + data["pid"] + `'></a>
                   </div>
               </div>
               <div class="card-footer text-muted">
-                <small class='text-muted'>Posted on ` + prettyDate(data["created"]) + " by <a href='#' uid='" + data["creator_uid"] + "' class='userLink'>" + data["creator_fname"] + " " + data["creator_lname"] + `</a></small>
+                <div class='d-flex'>
+                  <small class='text-muted btn btn-sm'>
+                    Posted on ` + prettyDate(data["created"]) + " by <a href='#' uid='" + data["creator_uid"] + "' class='userLink'>" + data["creator_fname"] + " " + data["creator_lname"] + `</a>
+                  </small>
+
+                  <button class='ml-auto saveUnsaveListing ` + ((data["saved"] === "1" || saved) ? "saved" : "") + `' pid=` + data["pid"] + `>
+                    <img class='m-auto' src='` + savedUrl + `' width="20" />
+                  </button>
+
+                </div>
               </div>
           </div>`;
 
@@ -42,7 +53,6 @@ function sortListings() {
     }
 
     return b["pid"] - a["pid"];
-     
   })
 }
 
@@ -55,6 +65,7 @@ function populateListings() {
 }
 
 var listingCount = 0;
+var totalListings = 0;
 function requestListings(page, search, minPrice, maxPrice, saved, mine, targetUserID) {
   $("#noResults").hide();
   $("#loadMore").hide();
@@ -102,6 +113,8 @@ function requestListings(page, search, minPrice, maxPrice, saved, mine, targetUs
         populateListings();
       }
 
+      totalListings = data["total_listings"];
+
       if (data["total_pages"] > curPage && data["total_pages"] != 0) {
         $("#loadMore").show();
       }
@@ -114,6 +127,40 @@ function requestListings(page, search, minPrice, maxPrice, saved, mine, targetUs
       console.log(res);
     }
 
+  })
+}
+
+function saveUnsaveListing(pid, btn) {
+  $.ajax({
+    "url": "http://u747950311.hostingerapp.com/househub/site/res/php/doSaveUnsave.php",
+    "type": "POST",
+    "data": { "pid": pid },
+    success: function(res) {
+      console.log(res);
+      var data = JSON.parse(res);
+
+      console.log(data);
+
+      if (data["status"] == "error") {
+        return;
+      }
+
+      var savedUrl = "http://u747950311.hostingerapp.com/househub/site/res/img/" + ((data["action"] == "saved" || saved) ? "heart_full" : "heart_outline") + ".svg";
+
+      btn.children("img").prop("src", savedUrl);
+
+      if (data["action"] == "unsaved" && saved) {
+        $(".listing-" + pid).remove();
+
+        listingCount--;
+        totalListings--;
+
+        $(".listingCount").text("Showing 1 to " + listingCount + " of " + totalListings + " results");
+      }
+    },
+    error: function(res) {
+
+    }
   })
 }
 
@@ -203,6 +250,10 @@ $(document).ready(function() {
     set("pid", $(this).attr("pid"));
 
     window.location.href = "./view.php";
+  })
+
+  $(document).on("click", ".saveUnsaveListing", function(e) {
+    saveUnsaveListing($(this).attr("pid"), $(this));
   })
 
   $(document).on("click", ".userLink", function(e) {

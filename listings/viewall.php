@@ -39,9 +39,36 @@
                 flex: 1 1 auto;
             }
 
+            .card-body p {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .card-body {
+                min-width: 0;
+            }
+
             .card-img {
                 width: 14rem;
                 height: 184.4px;
+            }
+
+            .saveUnsaveListing {
+                width: 32px;
+                height: 32px;
+            }
+
+            .saveUnsaveListing {
+                height: 32px;
+                width: 32px;
+
+                background: transparent;
+                border: none !important;
+            }
+
+            .saveUnsaveListing img {
+
             }
         </style>
 

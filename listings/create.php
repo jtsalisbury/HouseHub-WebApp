@@ -123,11 +123,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="pics">Pictures</label>
+                                <label for="pics">Pictures (3 required, png/jpg/jpeg only)</label>
                                 <input type="file" name="file[]" class="form-control-file" id="pics" accept="image/jpg, image/jpeg, image/png" multiple>
                             </div>
 
-                            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                            <button type="submit" class="btn btn-primary" id="submit">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Submit
+                            </button>
                         </form>
 
                     </div>

@@ -7,36 +7,14 @@
   }
 
   // Grab the post fields
-  $page = $_POST["page"];
-  $search = $_POST["search"];
-  $minPrice = $_POST["minPrice"];
-  $maxPrice = $_POST["maxPrice"];
-  $saved = $_POST["saved"];
-  $myRequests = $_POST["mine"];
-  $targetUserID = $_POST["targetUserID"];
-  $showHidden = $_POST["show_hidden"];
+  $uid = $_SESSION["uid"];
+  $pid = $_POST["pid"];
 
-  // Construct the payload
-  $url = "http://u747950311.hostingerapp.com/househub/api/listings/retrieve.php";
+  $url = "http://u747950311.hostingerapp.com/househub/api/listings/save.php";
   $data = array(
-    "uid" => "",
-    "saved" => $saved,
-    "page" => $page,
-    "price_min" => $minPrice,
-    "price_max" => $maxPrice,
-    "pid" => "",
-    "search_criteria" => $search,
-    "show_hidden" => $showHidden,
-    "requesterid" => $_SESSION["uid"]
+    "uid" => $uid,
+    "pid" => $pid,
   );
-
-  if ($myRequests === 'true' || $saved === 'true') {
-    $data["uid"] = $_SESSION["uid"];
-
-  } else if (!empty($targetUserID)) {
-    $data["uid"] = $targetUserID;
-    $data["saved"] = "";
-  }
 
   // Create the token
   $token = $jwt->generateToken($data);

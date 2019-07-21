@@ -1,6 +1,10 @@
 $(document).ready(function() {
+  $("#submit span").hide();
+
   $("#postForm").on("submit", function(e) {
     e.preventDefault();
+    $("#submit").prop("disabled", true);
+    $("#submit span").show();
 
     $.ajax({
       url: "http://u747950311.hostingerapp.com/househub/site/res/php/doPostListing.php",
@@ -10,14 +14,15 @@ $(document).ready(function() {
       cache: false,
       processData: false,
       success: function(res) {
+        console.log(res);
+        $("#submit span").hide();
+        $("#submit").prop("disabled", false);
+
         if (res == "") {
           return;
         }
 
         var data = JSON.parse(res);
-
-        console.log(res);
-        console.log(data);
 
         if (data["status"] == "error") {
           return;

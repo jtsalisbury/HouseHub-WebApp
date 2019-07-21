@@ -43,6 +43,10 @@
                 width: 14rem;
                 height: 184.4px;
             }
+
+            .text-muted {
+                font-size: 20px;
+            }
         </style>
 
         <title>HouseHub | View User</title>
@@ -84,41 +88,7 @@
 
                 <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10 align-self-center">
                     <div class="card-body">
-                        <h5 class="card-title">Login</h5>
-
-                        <p>
-                            Hey there! Welcome to HouseHub!
-                            <br>
-                            We're glad you're back :)
-                        </p>
-
-                        <form class="needs-validation" novalidate>
-                            <div class="input-group mb-2 mr-sm-2">
-                                <div class="input-group-prepend">
-                                  <div class="input-group-text"><img src="../res/img/envelope-closed.svg" height="15.281" width="15.281"></div>
-                                </div>
-                                <input type="email" class="form-control" id="email" placeholder="Email" required>
-                                <div class="invalid-feedback emailFeedback">
-                                    Please ensure you enter a valid email!
-                                </div>
-                            </div>
-
-                            <div class="input-group mb-2 mr-sm-2">
-                                <div class="input-group-prepend">
-                                  <div class="input-group-text"><img src="../res/img/key.svg" height="15.281" width="15.281"></div>
-                                </div>
-                                <input type="password" class="form-control" id="password" placeholder="Password" required>
-                                <div class="invalid-feedback passwordFeedback">
-                                    Please ensure you enter a password!
-                                </div>
-                            </div>
-
-                            <p>
-                                Don't have an account? <a href="register.php" target="_self">Register here</a>
-                            </p>
-
-                            <button type="submit" class="btn btn-primary" id="doLogin">Submit</button>
-                        </form>
+                        
 
                     </div>
                 </div>
