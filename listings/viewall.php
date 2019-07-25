@@ -47,11 +47,15 @@
 
             .card-body {
                 min-width: 0;
+                padding-bottom: 0px;
             }
 
             .card-img {
                 width: 14rem;
                 height: 184.4px;
+
+                max-width: 200px;
+                max-height: 200px;
             }
 
             .saveUnsaveListing {
@@ -117,7 +121,7 @@
                                     <button type="button" class="btn btn-primary sort priceSort">Price</button>
                                 </div>
                                 <div class="intput-group ml-2">
-                                    <button type="button" class="btn btn-primary sort postSort">Post Date</button>
+                                    <button type="button" class="btn btn-primary sort postSort">Created Date</button>
                                 </div>
                             </form>
                         </div>
@@ -135,27 +139,27 @@
                 <div class="card offset-sm-1 col-md-2 col-sm-10 align-self-center w-100" style="border: none;">
                     <form>
                         <div class="input-group ">
-                            <input type="text" class="form-control" id="searchText" placeholder="Search...">
+                            <input type="text" class="form-control" id="searchText" placeholder="Search..." autocomplete="off">
                             
                         </div>
                         <hr />
 
                         <div class="form-row form-group">
                             <div class="col">
-                                <input type="text" id="minPrice" class="form-control" placeholder="Min Price">
+                                <input type="number" min="0" id="minPrice" class="form-control" placeholder="Min Price" autocomplete="off">
                             </div>
                             <div class="col">
-                                <input type="text" id="maxPrice" class="form-control" placeholder="Max Price">
+                                <input type="number" min="0" id="maxPrice" class="form-control" placeholder="Max Price" autocomplete="off">
                             </div>
                         </div>
 
                         <div class="form-check form-group">
-                            <input type="checkbox" class="form-check-input" id="mySavedListings">
+                            <input type="checkbox" class="form-check-input" id="mySavedListings" autocomplete="off">
                             <label class="form-check-label" for="mySavedListings">My Saved Listings</label>
                         </div>
 
                         <div class="form-check form-group">
-                            <input type="checkbox" class="form-check-input" id="myListings">
+                            <input type="checkbox" class="form-check-input" id="myListings" autocomplete="off">
                             <label class="form-check-label" for="myListings">My Listings</label>
                         </div>
 

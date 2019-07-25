@@ -23,25 +23,13 @@ function validateInputs(inputClass) {
   return true;
 }
 
-function prettyDate(date) {
-  var d = new Date(date);
-
-  var day = d.getDate();
-  var mon = d.getMonth();
-  var year = d.getFullYear();
-
-  var min = d.getMinutes();
-  var hour = d.getHours();
-
-  var ampm = "AM";
-
-  if (hour >= 12) {
-    ampm = "PM";
-    hour = hour - 12;
-  }
-
-  return mon + "/" + day + "/" + year + " at " + hour + ":" + min + " " + ampm;
-}
+var prettyDate = function(input){
+    var d = new Date(Date.parse(input.replace(/-/g, "/")));
+    var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var date = month[d.getMonth()] + " " + d.getDate()  + ", " + d.getFullYear();
+    var time = d.toLocaleTimeString().toLowerCase().replace(/([\d]+:[\d]+):[\d]+(\s\w+)/g, "$1$2");
+    return (date + " at " + time);  
+};
 
 function set(key, val) {
   sessionStorage.setItem(key, val);

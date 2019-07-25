@@ -1,9 +1,72 @@
-<?php 
+<?php
+    error_reporting(E_ERROR | E_PARSE);
+
+    include_once "../res/util/enums.php";
+    include_once "../res/util/jwt.php";
     include("../res/util/helper.php");
+
+    // Parse settings and initialize global Jobjects
+    $data = parse_ini_file("../res/util/settings.ini");
+
+    // Used for: creation, verification and decoding of tokens
+    $jwt = new JWT($data["signKey"], $data["signAlgorithm"], $data["payloadSecret"], $data["payloadCipher"]);
+  
+    // Used for: global ENUMS
+    $ENUMS = new ENUMS();
 
     if (!checkLogin()) {
         header("Location: ../account/login.php");
     }
+
+    $id = $_GET["id"];
+
+    if (empty($id)) {
+        header("Location: ./viewall.php");
+    }
+
+    $data = array(
+        "pid" => $id,
+        "requesterid" => $_SESSION["uid"]
+    );
+
+    $token = $jwt->generateToken($data);
+    $token = json_encode(array("token" => $token));
+
+    $url = "http://u747950311.hostingerapp.com/househub/api/listings/retrieve.php";
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $token);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $result = curl_exec($ch);
+
+    if ($result === false) {
+        die("internal application error " . $result);
+    }
+
+    $result_d = json_decode($result, true);
+    if ($result_d["status"] == "error") {
+        die($result);
+    }
+
+    $token = $result_d["message"];
+    if ($jwt->verifyToken($token) === false) {
+        die("");
+    }
+
+    $payload = json_decode($jwt->decodePayload($token), true);
+
+    if ($payload["total_listings"] != 1) {
+        header("Location: ./viewall.php");
+    }
+
+    $listing = $payload["listings"][0];
+
+    $contactURL = 'mailto:' . $listing['creator_email'] . '?subject=I am interested in your property!&body=Hey ' . $listing['creator_fname'] . ',%0AI saw your property listed on HouseHub as ' . $listing['title'] . ' and would love to learn more.%0APlease let me know if this property is still available!%0A%0A Thanks!';
+
+    $savedImageURL = "http://u747950311.hostingerapp.com/househub/site/res/img/" . (($listing["saved"] == "1") ? "heart_full" : "heart_outline") . ".svg";
+
+    $isOwner = ($_SESSION["uid"] == $listing["creator_uid"]);
 ?>
 
 <!doctype html>
@@ -42,6 +105,49 @@
             .card-img {
                 width: 14rem;
                 height: 184.4px;
+            }
+
+            .carousel-control-prev-icon {
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+            }
+
+            .carousel-control-next-icon {
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+            }
+
+            .carousel .carousel-indicators li {
+                background-color: #fff;
+                background-color: rgba(70, 70, 70, 0.25);
+            }
+
+            .carousel .carousel-indicators .active {
+                background-color: #444;
+            }
+
+            .carousel-img {
+                max-height: 360px;
+            }
+
+            .location-map {
+                width: 100%;
+                max-height: 350px;
+            }
+
+            h4.card-title {
+                margin-top: 12px;
+            }
+
+            .saveUnsaveListing {
+                width: 32px;
+                height: 32px;
+            }
+
+            .saveUnsaveListing {
+                height: 32px;
+                width: 32px;
+
+                background: transparent;
+                border: none !important;
             }
         </style>
 
@@ -82,13 +188,76 @@
        <div class="container-fluid" style="height: calc(100vh - 121.5px); margin-top: 30px; margin-bottom: 30px;">
             <div class="row h-100">
                 <div class="card offset-sm-1 col-md-2 col-sm-10 align-self-center w-100" style="border: none;">
-                    info
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Price: $<? echo $listing["base_price"]; ?>/month + $<? echo $listing["add_price"]; ?></li>
+                        <li class="list-group-item">Posted by <a href='../account/view.php?id=<? echo $listing["creator_uid"]; ?>' class='userLink'><? echo $listing["creator_fname"] . " " . $listing["creator_lname"]; ?></a></li>
+                        <li class="list-group-item">Created on <? echo date_format(date_create($listing["created"]), "n/j/y"); ?></li>
+                        <a href="<? echo $contactURL; ?>" target="_blank" class="list-group-item list-group-item-action">Contact subleasor</a>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between h-100">
+                                <button class="saveUnsaveListing <? echo ($listing["saved"] == "saved" ? "saved" : ''); ?> " pid="<? echo $listing["pid"]; ?>">
+                                    <img class='m-auto' src="<? echo $savedImageURL; ?>" width="20" />
+                                </button>
+
+                                <? if ($listing["hidden"] == 1) { ?>
+                                    <span class='badge badge-secondary align-self-center' style='height: 20px;'>Hidden</span>
+                                <? } ?>
+                            </div>
+                        </li>
+                        <? if ($isOwner) { ?>
+                            <a href="./update.php?id=<? echo $listing['pid']; ?>" target="_self" class="list-group-item list-group-item-action">Modify Listing</a>
+                        <? } ?>
+                    </ul>
                 </div>
 
                 <div class="card col-md-7 offset-sm-1 col-sm-10 align-self-center h-100" style="overflow-y: auto; border: none;">
                     <div class="row">
                         <div class="col-12 mat-3">
-                            stuff
+                            <div class="card">
+                                <div class="card-body">
+                                    <h2 class='card-title'><? echo $listing["title"] ?></h2>
+                                    
+                                    <div id="listingImages" class="carousel slide" data-ride="carousel">
+                                      <ol class="carousel-indicators">
+                                        <?
+                                            for ($i = 0; $i < $listing["num_pictures"]; $i++) {
+                                                echo "<li class='" . ($i == 0 ? "active" : "") . "' data-target='#listingImages' data-slide-to='" . $i . "'></li>";
+                                            }
+                                        ?>
+                                      </ol>
+                                      <div class="carousel-inner">
+                                        <?
+                                            $pid = $listing["pid"];
+                                            for ($i = 0; $i < $listing["num_pictures"]; $i++) {
+                                                $url = "http://u747950311.hostingerapp.com/househub/api/images/" . $pid . "/" . $listing["images"][$i];
+
+                                                echo "<div class='carousel-item " . ($i == 0 ? "active" : "") . "'><img class='mx-auto d-block carousel-img' src='" . $url . "' alt='posting image'></div>";
+                                            }
+                                        ?>
+                                      </div>
+                                      <a class="carousel-control-prev" href="#listingImages" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                      </a>
+                                      <a class="carousel-control-next" href="#listingImages" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                      </a>
+                                    </div>
+
+                                    <h4 class="card-title">About</h4>
+                                    <div class="card-text">
+                                        <? echo $listing["desc"]; ?>
+                                    </div>
+
+                                    <h4 class="card-title">Location</h4>
+                                    <iframe
+                                      class="location-map"
+                                      frameborder="0" style="border:0"
+                                      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDrqRMlAyg4AfgxS26_LFJVd_h2ZgXjAdA&q=<? echo $listing['loc']; ?>" allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,7 +269,43 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="http://u747950311.hostingerapp.com/househub/site/res/js/main.js"></script>
-        <script src="http://u747950311.hostingerapp.com/househub/site/res/js/viewListings.js"></script>
+        <script>
+            $(document).ready(function() {
+                $(".saveUnsaveListing").on("click", function(e) {
+                    e.preventDefault();
+
+                    var pid = $(this).attr("pid");
+                    var btn = $(this);
+
+                    $.ajax({
+                        "url": "http://u747950311.hostingerapp.com/househub/site/res/php/doSaveUnsave.php",
+                        "type": "POST",
+                        "data": { "pid": pid },
+                        success: function(res) {
+                          console.log(res);
+                          var data = JSON.parse(res);
+
+                          console.log(data);
+
+                          if (data["status"] == "error") {
+                            return;
+                          }
+
+                          var savedUrl = "http://u747950311.hostingerapp.com/househub/site/res/img/" + ((data["action"] == "saved") ? "heart_full" : "heart_outline") + ".svg";
+
+                          btn.children("img").prop("src", savedUrl);
+
+                          console.log(this);
+                        },
+                        error: function(res) {
+
+                        }
+                    })
+                })
+
+                
+            })
+        </script>
     </body>
 </html>
 

@@ -5,10 +5,22 @@
   // Grab the passed parameters
   $email = $_POST["email"];
   $pass  = $_POST["password"];
+  $repass = $_POST["repass"];
+  $fname = $_POST["fname"];
+  $lname = $_POST["lname"];
+  $curpass = $_POST["curpass"];
 
   // Construct the token to send
-  $url = "http://u747950311.hostingerapp.com/househub/api/user/login.php";
-  $data = array("email" => $email, "pass" => $pass);
+  $url = "http://u747950311.hostingerapp.com/househub/api/user/update.php";
+  $data = array(
+    "email" => $email, 
+    "pass" => $pass,
+    "repass" => $repass,
+    "fname" => $fname,
+    "lname" => $lname,
+    "curpass" => $curpass,
+    "uid" => $_SESSION["uid"]
+  );
 
   $token = $jwt->generateToken($data);
 
@@ -43,12 +55,6 @@
 
   // Grab the payload from the token
   $payload = $jwt->decodePayload($token);  
-
-  $payload_dec = json_decode($jwt->decodePayload($token), true);
-
-  // Set the session user's id
-  $_SESSION["uid"] = $payload_dec["uid"];
-  $_SESSION["admin"] = $payload_dec["admin"];
 
   die($payload);
 ?>

@@ -128,7 +128,7 @@
                     }
 
                     $.ajax({
-                        "url": "http://u747950311.hostingerapp.com/househub/site/res/php/dologin.php",
+                        "url": "http://u747950311.hostingerapp.com/househub/site/res/php/doLogin.php",
                         "type": "POST",
                         "data": {"email": email, "password": pass},
                         success: function(res) {
@@ -159,7 +159,7 @@
                                 } 
                                 
                                 if (!err) {
-                                    alert("internal error; contact admin" + payload["message"]);
+                                    console.log("internal error; contact admin" + payload["message"]);
                                 }
 
                                 $("#doLogin").attr("disabled", false);
@@ -187,31 +187,3 @@
         </script>
     </body>
 </html>
-
-<!--
-
-
-          <div class="collapse navbar-collapse" id="navbarColor01">
-            
-            <? if (checkLogin()) { ?>
-            
-            <ul class="navbar-nav mr-auto justify-content-end">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">View All Listings</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Post New Listing</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
-                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 41px, 0px); top: 0px; left: 0px; will-change: transform;">
-                  <a class="dropdown-item" href="#">Update Information</a>
-                  <a class="dropdown-item" href="#">Logout</a>
-                </div>
-              </li>
-            </ul>
-
-            <? } ?>
-           
-          </div>
--->

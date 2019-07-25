@@ -13,12 +13,12 @@ function createListing(data) {
                   </div>
                   <div class='card-body'>
                       <div class='d-flex'>
-                        <h4 class='card-title'> ` + data["title"] + `</h4>` + (data["hidden"] == 1 ? "<span class='badge badge-secondary ml-auto' style='height: 20px'>Hidden</span>" : "") + `
+                        <h4 class='card-title text-truncate'> ` + data["title"] + `</h4>` + (data["hidden"] == 1 ? "<span class='badge badge-secondary ml-auto' style='height: 20px'>Hidden</span>" : "") + `
                       </div>
 
-                      <p class='card-text'>` + data["desc"] + `</p>
-                      <p class='card-text'>Price: $` + data["base_price"] + `</p>
-                      <p class='card-text'>Located at ` + data["loc"] + `</p>
+                      <p class='card-text text-truncate'>` + data["desc"] + `</p>
+                      <p class='card-text text-truncate'>Price: $` + data["base_price"] + `</p>
+                      <p class='card-text text-truncate'>Located at ` + data["loc"] + `</p>
 
                       <a href='#' class='listingLink stretched-link' pid='` + data["pid"] + `'></a>
                   </div>
@@ -49,7 +49,14 @@ function sortListings() {
     }
 
     if (postSort) {
-      return a["created"] - b["created"];
+      console.log("a " + a["created"]);
+      console.log("b " + b["created"]);
+      console.log(new Date(a["created"]) - new Date(b["created"]));
+
+      var aDate = new Date(a["created"]);
+      var bDate = new Date(b["created"]);
+
+      return ((aDate < bDate) ? -1 : ((aDate > bDate) ? 1 : 0));
     }
 
     return b["pid"] - a["pid"];
@@ -62,6 +69,12 @@ function populateListings() {
   $.each(listings, function(i, e) {
     createListing(e);
   })
+}
+
+function parseDate(input) {
+  var parts = input.match(/(\d+)/g);
+  // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+  return new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]); //     months are 0-based
 }
 
 var listingCount = 0;
@@ -247,9 +260,7 @@ $(document).ready(function() {
   $(document).on("click", ".listingLink", function(e) {
     e.preventDefault();
 
-    set("pid", $(this).attr("pid"));
-
-    window.location.href = "./view.php";
+    window.location.href = "./view.php?id=" + $(this).attr("pid");
   })
 
   $(document).on("click", ".saveUnsaveListing", function(e) {
@@ -259,8 +270,6 @@ $(document).ready(function() {
   $(document).on("click", ".userLink", function(e) {
     e.preventDefault();
 
-    set("target_uid", $(this).attr("uid"));
-
-    window.location.href = "../account/view.php";
+    window.location.href = "../account/view.php?id=" + $(this).attr("uid");
   })
 })

@@ -1,9 +1,56 @@
 <?php 
     include("../res/util/helper.php");
+    error_reporting(E_ERROR | E_PARSE);
+
+    include_once "../res/util/enums.php";
+    include_once "../res/util/jwt.php";
 
     if (!checkLogin()) {
-        header("Location: ../account/login.php");
+        header("Location: ./login.php");
     }
+
+    // Parse settings and initialize global Jobjects
+    $data = parse_ini_file("../res/util/settings.ini");
+
+    // Used for: creation, verification and decoding of tokens
+    $jwt = new JWT($data["signKey"], $data["signAlgorithm"], $data["payloadSecret"], $data["payloadCipher"]);
+  
+    // Used for: global ENUMS
+    $ENUMS = new ENUMS();
+
+    $id = $_GET["id"];
+    if(empty($id)){
+        header("Location: ../listings/viewall.php");
+    }
+
+    $data = array("uid" => $id);
+
+    $token = $jwt->generateToken($data);
+    $token = json_encode(array("token" => $token));
+
+    $url = "http://u747950311.hostingerapp.com/househub/api/user/retrieve.php";
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $token);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $result = curl_exec($ch);
+
+    if ($result === false) {
+        die("internal application error " . $result);
+    }
+
+    $result_d = json_decode($result, true);
+    if ($result_d["status"] == "error") {
+        die($result);
+    }
+
+    $token = $result_d["message"];
+    if ($jwt->verifyToken($token) === false) {
+        die("");
+    }
+
+    $payload = json_decode($jwt->decodePayload($token), true);
 ?>
 
 <!doctype html>
@@ -68,14 +115,14 @@
                     <a class="nav-link" href="../listings/viewall.php">View Listings</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="./create.php">Post Listing</a>
+                    <a class="nav-link" href="../listings/create.php">Post Listing</a>
                   </li>
                   <li class="nav-item btn-group">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
                     
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="../account/update.php">Update Information</a>
-                      <a class="dropdown-item" href="../account/logout.php">Logout</a>
+                      <a class="dropdown-item" href="./update.php">Update Information</a>
+                      <a class="dropdown-item" href="./logout.php">Logout</a>
                     </div>
                   </li>
                 </ul>
@@ -83,12 +130,21 @@
 
         </nav>
 
-       <div class="container" style="height:90vh">
+       <div class="container-fluid" style="height:calc(100vh-121.5px); margin-top:30px; margin-bottom:30px;">
            <div class="row h-100">
 
                 <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10 align-self-center">
                     <div class="card-body">
-                        
+                        <h5 class="card-title">User Information</h5>
+
+                         <p>
+                            Name: <? echo $payload["fname"]; ?>
+                            <? echo $payload["lname"]; ?>
+                            <br>
+                            Email: <? echo $payload["email"]; ?>
+                            <br>
+                            Number of Listings: <? echo $payload["num_listings"]; ?>
+                        </p>
 
                     </div>
                 </div>

@@ -79,10 +79,10 @@
 
         </nav>
 
-       <div class="container" style="height:90vh">
+        <div class="container-fluid" style="height:calc(100vh - 61.5px);">
            <div class="row h-100">
 
-                <div class="card offset-md-2 col-md-8 offset-sm-1 col-sm-10 align-self-center">
+                <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10 align-self-center">
                     <div class="card-body">
                         <h5 class="card-title">Post New Listing</h5>
                         <p>
@@ -123,14 +123,18 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="pics">Pictures (3 required, png/jpg/jpeg only)</label>
+                                <label for="pics">Pictures (3 required, png/jpg/jpeg only) (recommended same size)</label>
                                 <input type="file" name="file[]" class="form-control-file" id="pics" accept="image/jpg, image/jpeg, image/png" multiple>
                             </div>
 
-                            <button type="submit" class="btn btn-primary" id="submit">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Submit
-                            </button>
+                            <div class="form-group">
+                                By clicking Submit you acknowledge that the email you registered with will be publicly available
+                                <br />
+                                <button type="submit" class="btn btn-primary" id="submit">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Submit
+                                </button>
+                            </div>
                         </form>
 
                     </div>

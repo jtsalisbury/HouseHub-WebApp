@@ -12,9 +12,10 @@
     $loc   = $_POST["loc"];
     $base  = $_POST["base_price"];
     $add   = $_POST["add_price"];
-    $hidden = $_POST["hidden"] === "1" ? 1 : 0;
+    $hidden = isset($_POST["hidden"]) ? 1 : 0;
+    $pid   = $_POST["pid"];
 
-    $url = "http://u747950311.hostingerapp.com/househub/api/listings/create.php";
+    $url = "http://u747950311.hostingerapp.com/househub/api/listings/update.php";
 
     // Construct our data payload
     $payload = array(
@@ -24,7 +25,8 @@
         "location" => $loc,
         "rent_price" => $base,
         "add_price" => $add,
-        "hidden" => $hidden
+        "hidden" => $hidden,
+        "pid" => $pid
     );
 
     // Generate the token
@@ -36,7 +38,6 @@
 
     // Create the cURLFiles (basically we send the $_FILES to the new location)
     $countFiles = count($_FILES["file"]["name"]);
-
     foreach ($_FILES["file"]["error"] as $key => $error) {
         if ($error == UPLOAD_ERR_OK) {
 
@@ -63,7 +64,7 @@
 
     // Decode the result
     $result_d = json_decode($result, true);
-
+    
     if ($result_d["status"] == "error") {
         die($result);
     }

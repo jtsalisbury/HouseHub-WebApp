@@ -6,10 +6,13 @@ $(document).ready(function() {
     $("#submit").prop("disabled", true);
     $("#submit span").show();
 
+    var fd = new FormData(this);
+    fd.append("pid", $("#postForm").attr("pid"));
+
     $.ajax({
-      url: "http://u747950311.hostingerapp.com/househub/site/res/php/doPostListing.php",
+      url: "http://u747950311.hostingerapp.com/househub/site/res/php/doUpdateListing.php",
       type: "POST",
-      data: new FormData(this),
+      data: fd,
       contentType: false,
       cache: false,
       processData: false,
