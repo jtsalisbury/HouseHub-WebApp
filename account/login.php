@@ -46,7 +46,7 @@
             </button>
         </nav>
 
-        <div class="container" style="height:90vh">
+        <div class="container" style="height:calc(100vh - 61.5px - 56px);">
            <div class="row h-100">
 
                 <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10 align-self-center">
@@ -91,6 +91,11 @@
                 </div>
             </div>
         </div>
+
+<footer class="page-footer font-small blue">
+  <div class="footer-email text-center py-3"> Questions or Concerns? <a href="mailto:househubteam@gmail.com" target="_blank">Contact us!</a> 
+  </div>
+</footer>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -159,7 +164,7 @@
                                 } 
                                 
                                 if (!err) {
-                                    console.log("internal error; contact admin" + payload["message"]);
+                                    alert("internal error; contact admin" + payload["message"]);
                                 }
 
                                 $("#doLogin").attr("disabled", false);
@@ -187,3 +192,31 @@
         </script>
     </body>
 </html>
+
+<!--
+
+
+          <div class="collapse navbar-collapse" id="navbarColor01">
+            
+            <? if (checkLogin()) { ?>
+            
+            <ul class="navbar-nav mr-auto justify-content-end">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">View All Listings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Post New Listing</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
+                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 41px, 0px); top: 0px; left: 0px; will-change: transform;">
+                  <a class="dropdown-item" href="#">Update Information</a>
+                  <a class="dropdown-item" href="#">Logout</a>
+                </div>
+              </li>
+            </ul>
+7
+            <? } ?>
+           
+          </div>
+-->

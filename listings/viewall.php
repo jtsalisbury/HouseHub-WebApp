@@ -110,7 +110,7 @@
 
         </nav>
 
-        <div class="container-fluid" style="height: calc(100vh - 199.5px); margin-top: 30px; margin-bottom: 30px;">
+        <div class="container-fluid" style="height: calc(100vh - 61.5px - 56px);">
             <div class="row">
                 <div class="card offset-md-4 col-7" style="border: none;">
                     <div class="row">
@@ -135,7 +135,7 @@
                 </div>
             </div>
 
-            <div class="row h-100">
+            <div class="row" style="height: calc(100% - 78px);">
                 <div class="card offset-sm-1 col-md-2 col-sm-10 align-self-center w-100" style="border: none;">
                     <form>
                         <div class="input-group ">
@@ -193,6 +193,11 @@
                 </div>
             </div>
         </div>
+        
+        <footer class="page-footer font-small blue">
+          <div class="footer-email text-center py-3"> Questions or Concerns? <a href="mailto:househubteam@gmail.com" target="_blank">Contact us!</a> 
+          </div>
+        </footer>
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

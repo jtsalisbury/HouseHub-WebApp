@@ -167,7 +167,7 @@
 
         </nav>
 
-         <div class="container-fluid" style="height:calc(100vh - 61.5px);">
+         <div class="container-fluid" style="height:calc(100vh - 91.5px - 56px); margin-top: 30px">
            <div class="row h-100">
 
                 <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10 align-self-center">
@@ -179,22 +179,34 @@
                             Fill out the details and we'll do the rest! (adding any pictures will override the ones already there)
                         </p>
 
-                        <form action="../res/php/doPostListing.php" enctype='multiple/form-data' id="postForm" pid="<? echo $listing['pid']; ?>">
+                        <form action="../res/php/doPostListing.php" class="needs-validation" novalidate enctype='multiple/form-data' id="postForm" pid="<? echo $listing['pid']; ?>">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="title" id="title" value="<? echo $listing['title']; ?>">
+                                <input type="text" class="form-control" name="title" id="title" value="<? echo $listing['title']; ?>" required>
+                                <div class="invalid-feedback titleFeedback">
+                                    Please ensure you enter a valid title!
+                                </div>
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control" name="loc" id="loc" value="<? echo $listing['loc']; ?>">
+                                <input type="text" class="form-control" name="loc" id="loc" value="<? echo $listing['loc']; ?>" required>
+                                <div class="invalid-feedback locationFeedback">
+                                    Please ensure you enter a valid location!
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col">
-                                        <input type="number" class="form-control" name="base_price" id="base_price" min="0" value="<? echo $listing['base_price']; ?>">
+                                        <input type="number" class="form-control" name="base_price" id="base_price" min="0" value="<? echo $listing['base_price']; ?>" required>
+                                        <div class="invalid-feedback basePriceFeedback">
+                                            Please ensure you enter a valid price!
+                                        </div>
                                     </div>
                                     <div class="col">
-                                        <input type="number" class="form-control" name="add_price" id="add_price" min="0" value="<? echo $listing['add_price']; ?>">
+                                        <input type="test" class="form-control" name="add_price" id="add_price" value="<? echo $listing['add_price']; ?>">
+                                        <div class="invalid-feedback addPriceFeedback">
+                                            Please ensure you enter a valid price!
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -207,12 +219,18 @@
                             </div>
 
                             <div class="form-group">
-                                <textarea class="form-control" name="desc" id="desc" rows="3"><? echo $listing['desc']; ?></textarea>
+                                <textarea class="form-control" name="desc" id="desc" rows="3" required><? echo $listing['desc']; ?></textarea>
+                                <div class="invalid-feedback descFeedback">
+                                    Please ensure you enter a valid description!
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="pics">Pictures (3 required, png/jpg/jpeg only) (recommended same size)</label>
                                 <input type="file" name="file[]" class="form-control-file" id="pics" accept="image/jpg, image/jpeg, image/png" multiple>
+                                <div class="invalid-feedback imageFeedback">
+                                    Please ensure you upload at least three valid images!
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -231,7 +249,10 @@
         </div>
 
             
-
+<footer class="page-footer font-small blue">
+  <div class="footer-email text-center py-3"> Questions or Concerns? <a href="mailto:househubteam@gmail.com" target="_blank">Contact us!</a> 
+  </div>
+</footer>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

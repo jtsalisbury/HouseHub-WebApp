@@ -130,10 +130,10 @@
 
         </nav>
 
-       <div class="container-fluid" style="height:calc(100vh-121.5px); margin-top:30px; margin-bottom:30px;">
-           <div class="row h-100">
+       <div class="container-fluid" style="height:calc(100vh - 121.5px - 56px); margin-top:30px; margin-bottom:30px;">
+           <div class="row">
 
-                <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10 align-self-center">
+                <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10">
                     <div class="card-body">
                         <h5 class="card-title">User Information</h5>
 
@@ -150,7 +150,10 @@
                 </div>
             </div>
         </div>
-
+<footer class="page-footer font-small blue">
+  <div class="footer-email text-center py-3"> Questions or Concerns? <a href="mailto:househubteam@gmail.com" target="_blank">Contact us!</a> 
+  </div>
+</footer>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

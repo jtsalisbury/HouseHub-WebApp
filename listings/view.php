@@ -185,11 +185,11 @@
 
         </nav>
 
-       <div class="container-fluid" style="height: calc(100vh - 121.5px); margin-top: 30px; margin-bottom: 30px;">
+       <div class="container-fluid" style="height: calc(100vh - 91.5px - 56px); margin-top: 30px;">
             <div class="row h-100">
                 <div class="card offset-sm-1 col-md-2 col-sm-10 align-self-center w-100" style="border: none;">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Price: $<? echo $listing["base_price"]; ?>/month + $<? echo $listing["add_price"]; ?></li>
+                        <li class="list-group-item">$<? echo $listing["base_price"]; ?>/month + <? echo $listing["add_price"]; ?></li>
                         <li class="list-group-item">Posted by <a href='../account/view.php?id=<? echo $listing["creator_uid"]; ?>' class='userLink'><? echo $listing["creator_fname"] . " " . $listing["creator_lname"]; ?></a></li>
                         <li class="list-group-item">Created on <? echo date_format(date_create($listing["created"]), "n/j/y"); ?></li>
                         <a href="<? echo $contactURL; ?>" target="_blank" class="list-group-item list-group-item-action">Contact subleasor</a>
@@ -263,7 +263,10 @@
                 </div>
             </div>
         </div>
-
+<footer class="page-footer font-small blue">
+  <div class="footer-email text-center py-3"> Questions or Concerns? <a href="mailto:househubteam@gmail.com" target="_blank">Contact us!</a> 
+  </div>
+</footer>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

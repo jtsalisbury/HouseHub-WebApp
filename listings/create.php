@@ -79,7 +79,7 @@
 
         </nav>
 
-        <div class="container-fluid" style="height:calc(100vh - 61.5px);">
+        <div class="container-fluid" style="height:calc(100vh - 91.5px - 56px); margin-top: 30px;">
            <div class="row h-100">
 
                 <div class="card offset-md-3 col-md-6 offset-sm-1 col-sm-10 align-self-center">
@@ -91,22 +91,35 @@
                             Fill out the details and we'll do the rest!
                         </p>
 
-                        <form action="../res/php/doPostListing.php" enctype='multiple/form-data' id="postForm">
+                        <form action="../res/php/doPostListing.php" enctype='multiple/form-data' id="postForm" class="needs-validation" novalidate>
                             <div class="form-group">
-                                <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+                                <input type="text" class="form-control" name="title" id="title" placeholder="Title" required>
+                                <div class="invalid-feedback titleFeedback">
+                                    Please ensure you enter a valid title!
+                                </div>
                             </div>
 
+
                             <div class="form-group">
-                                <input type="text" class="form-control" name="loc" id="loc" placeholder="Location">
+                                <input type="text" class="form-control" name="loc" id="loc" placeholder="Location" required>
+                                <div class="invalid-feedback locationFeedback">
+                                    Please ensure you enter a location!
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col">
-                                        <input type="number" class="form-control" name="base_price" id="base_price" min="0" placeholder="Base cost">
+                                        <input type="number" class="form-control" name="base_price" id="base_price" min="0" placeholder="Base cost" required>
+                                        <div class="invalid-feedback basePriceFeedback">
+                                            Please ensure you enter a valid price!
+                                        </div>
                                     </div>
                                     <div class="col">
-                                        <input type="number" class="form-control" name="add_price" id="add_price" min="0" placeholder="Additional costs">
+                                        <input type="test" class="form-control" name="add_price" id="add_price" placeholder="Additional costs">
+                                        <div class="invalid-feedback addPriceFeedback">
+                                            Please ensure you enter a valid price!
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -119,12 +132,18 @@
                             </div>
 
                             <div class="form-group">
-                                <textarea class="form-control" name="desc" id="desc" rows="3" placeholder="List important details and your phone # (if you'd like)"></textarea>
+                                <textarea class="form-control" name="desc" id="desc" rows="3" placeholder="List important details and your phone # (if you'd like)" required></textarea>
+                                <div class="invalid-feedback descFeedback">
+                                    Please ensure you enter a valid description!
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="pics">Pictures (3 required, png/jpg/jpeg only) (recommended same size)</label>
-                                <input type="file" name="file[]" class="form-control-file" id="pics" accept="image/jpg, image/jpeg, image/png" multiple>
+                                <input type="file" name="file[]" class="form-control-file" required id="pics" accept="image/jpg, image/jpeg, image/png" multiple>
+                                <div class="invalid-feedback imageFeedack">
+                                    Please ensure you add at least three images!
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -142,7 +161,10 @@
             </div>
         </div>
 
-
+        <footer class="page-footer font-small blue">
+  <div class="footer-email text-center py-3"> Questions or Concerns? <a href="mailto:househubteam@gmail.com" target="_blank">Contact us!</a> 
+  </div>
+</footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
